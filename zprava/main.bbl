@@ -1,0 +1,23 @@
+\begin{thebibliography}{1}
+\providecommand{\biburl}[1]{\url{#1}}
+\providecommand{\urlprefix}{Dostupn{\' e} z: }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\selectlanguage}[1]{\relax}
+\providecommand{\eprint}[2][]{\biburl{#2}}
+
+\bibitem{floydWarsh}
+ALGORITMY.NET: Floyd-Warshallův algoritmus. 2016, [cit. 2016-04-07].
+\urlprefix\biburl{https://www.algoritmy.net/article/5207/Floyd-Warshalluv-algoritmus}
+
+\bibitem{dijskraAlg}
+ALGORITMY.NET: Dijkstrův algoritmus. 2016, [cit. 2016-04-07].
+\urlprefix\biburl{https://www.algoritmy.net/article/5108/Dijkstruv-algoritmus}
+
+\bibitem{cudaFloyd}
+Hochberg, R.: Dynamic programming with CUDA -- Part 1. 2016, [cit. 2016-05-02].
+\urlprefix\biburl{http://www.shodor.org/media/content/petascale/materials/UPModules/dynamicProgrammingPartI/dynProgPt1ModuleDoc.pdf}
+
+\end{thebibliography}
