@@ -1,4 +1,4 @@
-Time: 12066
+Time: 12070.8
 Writing results...
 
 Done

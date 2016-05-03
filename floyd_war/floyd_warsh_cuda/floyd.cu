@@ -3,7 +3,7 @@
 #include <limits>
 #include <fstream>
 #include <algorithm>
-#define BLOCK_SIZE 512
+#define BLOCK_SIZE 1007
 
 using namespace std;
 
