@@ -1,5 +1,5 @@
 #!/bin/bash
-i=1024;
+i=1023;
 mkdir log;
 while [[ $i -gt 0 ]]; do
         sed -i -e "s/define BLOCK_SIZE 512/define BLOCK_SIZE $i/g" floyd.cu;
@@ -21,6 +21,6 @@ while [[ $i -gt 0 ]]; do
 
 	mv log logs_gtx_780_Ti/log$i;
 	mkdir log
-        i=$(($i-5));
+        i=$(($i-2));
 done;
 rm log;
