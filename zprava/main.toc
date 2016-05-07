@@ -13,3 +13,4 @@
 \contentsline {subsection}{\numberline {4.3}Nam\IeC {\v e}\IeC {\v r}en\IeC {\'a} data}{6}
 \contentsline {section}{\numberline {5}CUDA}{11}
 \contentsline {subsection}{\numberline {5.1}Floyd Warshall algoritmus}{11}
+\contentsline {subsection}{\numberline {5.2}Nam\IeC {\v e}\IeC {\v r}en\IeC {\'a} data}{12}

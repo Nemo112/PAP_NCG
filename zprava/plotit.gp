@@ -30,3 +30,22 @@ set ylabel "Čas"
 set xlabel "Počet vláken"
 plot "floyd_phi_data.dat" using 1:(1337.32)/$2 with lines title "Rychlost zpracování", \
 x with lines title "Lineární zrychlení"
+
+
+
+set terminal png
+set output "graf_floyd_gts_780_Ti.png"
+set title "Graf výpočtu Floyd Warshall algoritmu -- NVidia GTS 780 Ti"
+set ylabel "Čas"
+set xlabel "Počet vláken"
+plot "gen_gts_780_Ti.dat" using 1:(336745)/$2 with lines title "Rychlost zpracování", \
+x with lines title "Lineární zrychlení"
+
+
+set terminal png
+set output "graf_floyd_gts_650_Ti.png"
+set title "Graf výpočtu Floyd Warshall algoritmu -- NVidia GTS 650 Ti"
+set ylabel "Čas"
+set xlabel "Počet vláken"
+plot "gen_gts_650_Ti.dat" using 1:(1006140)/$2 with lines title "Rychlost zpracování", \
+x with lines title "Lineární zrychlení"

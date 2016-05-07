@@ -333,7 +333,7 @@ Doby výpočtu je v následující tabulce (\ref{tab:xnfl}):
 	\caption{Čas výpočtu Floyd Warshall algoritmu}
 	\begin{tabular}{| l | r |}
 \hline
-Počet jader & Rychlost ve vteřinách \\ \hline
+Počet vláken & Rychlost ve vteřinách \\ \hline
 1 & 155.992 \\ \hline
 2 & 79.9949 \\ \hline
 3 & 53.5526 \\ \hline
@@ -378,7 +378,7 @@ Zrychlení Floyd Warshallova algoritmu pro velké počty vláken přestává dr�
 	\caption{Čas výpočtu Dijkstra algoritmu}
 	\begin{tabular}{| l | r |}
 \hline
-Počet jader & Rychlost ve vteřinách \\ \hline
+Počet vláken & Rychlost ve vteřinách \\ \hline
 1 & 360.883 \\ \hline
 2 & 170.996 \\ \hline
 3 & 120.683 \\ \hline
@@ -425,7 +425,7 @@ V následující tabulce jsou uvedeny pouze referenční hodnoty (\ref{tab:djph}
 	\caption{Čas výpočtu Floyd Warshall algoritmu}
 	\begin{tabular}{| l | r |}
 \hline
-Počet jader & Rychlost ve vteřinách \\ \hline
+Počet vláken & Rychlost ve vteřinách \\ \hline
 1 & 1337.32 \\ \hline
 10 & 142.572 \\ \hline
 20 & 68.1147 \\ \hline
@@ -469,7 +469,7 @@ Zrychlení Floyd Warshallova algoritmu pro velké počty vláken přestává dr�
 	\caption{Čas výpočtu Dijkstra algoritmu}
 	\begin{tabular}{| l | r |}
 \hline
-Počet jader & Rychlost ve vteřinách \\ \hline
+Počet vláken & Rychlost ve vteřinách \\ \hline
 1 & 2622.89 \\ \hline
 10 & 253.226 \\ \hline
 20 & 123.594 \\ \hline
@@ -593,10 +593,98 @@ __global__ void floyd_kern(int k, int *matrix, int n){
 }
 \end{verbatim}
 
-Narozdíl od řešení pomocí cyklů každé vlákno představuje jeden samostatný kousek výpočtu. Všechna součastně běžící vlákna mezi sebou sdílí \texttt{bmatch}, který představuje \texttt{matrix[i*n+k]}. Podle umístěná v gridu se rozhodnou, zdali je nejlepší cestou součastná hodnota nebo součet \texttt{tmp} a \texttt{bmatch}, které představují \texttt{matrix[i*n+k] + matrix[k*n+j]}. V případě, že je \texttt{bmatch} nebo \texttt{tmp} roven nekonečnu, pak nemohou představovat v součtu nejlepší cestu a vlákno se ukončuje.
+Na rozdíl od řešení pomocí cyklů každé vlákno představuje jeden samostatný kousek výpočtu. Všechna součastně běžící vlákna mezi sebou sdílí \texttt{bmatch}, který představuje \texttt{matrix[i*n+k]}. Podle umístěná v gridu se rozhodnou, zdali je nejlepší cestou současná hodnota nebo součet \texttt{tmp} a \texttt{bmatch}, které představují \texttt{matrix[i*n+k] + matrix[k*n+j]}. V případě, že je \texttt{bmatch} nebo \texttt{tmp} roven nekonečnu, pak nemohou představovat v součtu nejlepší cestu a vlákno se ukončuje.
 
 Měření proběhne pomocí měnění velikosti proměnnné \texttt{BLOCK\_SIZE}, která představuje velikost sloupce v řádku a také počet vláken, které v buňce tabulky pracují.
 
+\subsection{Naměřená data}
+
+První měření probíhalo na \texttt{GTS 650 Ti}. 
+
+\begin{table}[H]
+  \centering
+	\caption{Čas výpočtu Floyd Warshall algoritmu na GTS 650 Ti v milisekundách}
+	\begin{tabular}{| l | r |}
+\hline
+Počet vláken & Rychlost ve vteřinách \\ \hline
+40 & 27695.6 \\ \hline
+80 & 14280.9 \\ \hline
+120 & 10626.7 \\ \hline
+160 & 10237 \\ \hline
+200 & 11102.6 \\ \hline
+240 & 10616.3 \\ \hline
+280 & 10881.6 \\ \hline
+320 & 10617.4 \\ \hline
+360 & 11483.2 \\ \hline
+400 & 12095 \\ \hline
+440 & 11870.1 \\ \hline
+480 & 11299.5 \\ \hline
+520 & 13275.9 \\ \hline
+560 & 13277.6 \\ \hline
+600 & 13277.2 \\ \hline
+640 & 13278.1 \\ \hline
+680 & 13277.2 \\ \hline
+720 & 13277.2 \\ \hline
+760 & 13278.5 \\ \hline
+800 & 13277.8 \\ \hline
+840 & 13277.4 \\ \hline
+880 & 13278.1 \\ \hline
+920 & 13104.1 \\ \hline
+960 & 12701 \\ \hline
+1000 & 12376.3 \\ \hline
+	\end{tabular}
+  \label{tab:cufl}
+\end{table}
+
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.8\textwidth]{graf_floyd_gts_650_Ti.png}
+  \caption{Graf zrychlení výpočtu Floyd Warshall}
+  \label{fig:floydcuda}
+\end{figure}
+
+
+Druhé měření probíhalo na \texttt{GTS 780 Ti} na školním clusteru \texttt{star.fit.cvut.cz}.
+
+\begin{table}[H]
+  \centering
+	\caption{Čas výpočtu Floyd Warshall algoritmu na GTS 780 Ti v milisekundách}
+	\begin{tabular}{| l | r |}
+\hline
+Počet vláken & Rychlost ve vteřinách \\ \hline
+33 & 13517.8 \\ \hline
+99 & 3383.1 \\ \hline
+165 & 3184.83 \\ \hline
+231 & 3024.53 \\ \hline
+264 & 4341.66 \\ \hline
+297 & 3113.47 \\ \hline
+363 & 4447.31 \\ \hline
+429 & 3211.24 \\ \hline
+495 & 4469.42 \\ \hline
+561 & 5044.13 \\ \hline
+594 & 4665.71 \\ \hline
+627 & 4701.09 \\ \hline
+693 & 5699.16 \\ \hline
+759 & 3928.79 \\ \hline
+825 & 5163.5 \\ \hline
+891 & 3555.05 \\ \hline
+924 & 5157.97 \\ \hline
+957 & 5192.25 \\ \hline
+1023 & 13610.1 \\ \hline
+	\end{tabular}
+  \label{tab:cufltwo}
+\end{table}
+
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.8\textwidth]{graf_floyd_gts_780_Ti.png}
+  \caption{Graf zrychlení výpočtu Floyd Warshall}
+  \label{fig:floydcudatwo}
+\end{figure}
+
+\newpage
 
 \bibliographystyle{csn690}
 \bibliography{literatura}
