@@ -1,8 +1,9 @@
 \select@language {czech}
-\contentsline {figure}{\numberline {1}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Floyd}}{7}
-\contentsline {figure}{\numberline {2}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Dijkstra}}{8}
-\contentsline {figure}{\numberline {3}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Floyd}}{9}
-\contentsline {figure}{\numberline {4}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Dijkstra}}{10}
-\contentsline {figure}{\numberline {5}{\ignorespaces Rozm\IeC {\'\i }st\IeC {\v e}n\IeC {\'\i } vl\IeC {\'a}ken v gridu}}{11}
-\contentsline {figure}{\numberline {6}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Floyd Warshall}}{13}
-\contentsline {figure}{\numberline {7}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Floyd Warshall}}{14}
+\contentsline {figure}{\numberline {1}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Floyd}}{10}{figure.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Dijkstra}}{12}{figure.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Floyd}}{14}{figure.3}
+\contentsline {figure}{\numberline {4}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Dijkstra}}{16}{figure.4}
+\contentsline {figure}{\numberline {5}{\ignorespaces Rozm\IeC {\'\i }st\IeC {\v e}n\IeC {\'\i } vl\IeC {\'a}ken v gridu}}{17}{figure.5}
+\contentsline {figure}{\numberline {6}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Floyd Warshall}}{20}{figure.6}
+\contentsline {figure}{\numberline {7}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Floyd Warshall}}{21}{figure.7}
+\contentsline {figure}{\numberline {8}{\ignorespaces Graf zrychlen\IeC {\'\i } v\IeC {\'y}po\IeC {\v c}tu Dijkstrova algoritmu}}{25}{figure.8}

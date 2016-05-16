@@ -49,3 +49,12 @@ set ylabel "Čas"
 set xlabel "Počet vláken"
 plot "gen_gts_650_Ti.dat" using 1:(1006140)/$2 with lines title "Rychlost zpracování", \
 x with lines title "Lineární zrychlení"
+
+set terminal png
+set output "graf_dikstra1_gts_780_Ti.png"
+set title "Graf výpočtu Dijkstrova algoritmu -- NVidia GTS 780 Ti"
+set ylabel "Čas"
+set xlabel "Počet vláken"
+plot "gen_gts_780_Ti_dij.dat" using 1:((1183147)/$2) with lines title "Rychlost zpracování" lt rgb "red", \
+x with lines title "Lineární zrychlení" lt rgb "green"
+

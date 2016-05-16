@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Definice probl\351mu}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Zad\341n\355}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Sekvencn\355 re\235en\355 a implementace}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Floyd Warshall algoritmus}{section.2}% 4
+\BOOKMARK [3][-]{subsubsection.2.1.1}{Implementace}{subsection.2.1}% 5
+\BOOKMARK [2][-]{subsection.2.2}{Dijkstruv algoritmus}{section.2}% 6
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Implementace}{subsection.2.2}% 7
+\BOOKMARK [1][-]{section.3}{Instance dat}{}% 8
+\BOOKMARK [1][-]{section.4}{OpenMP}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{Floyd Warshall algoritmus}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.2}{Dijkstruv algoritmus}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.3}{Nameren\341 data}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{CUDA}{}% 13
+\BOOKMARK [2][-]{subsection.5.1}{Floyd Warshall algoritmus}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.2}{Nameren\341 data}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.3}{Dijkstruv algoritmus}{section.5}% 16
+\BOOKMARK [2][-]{subsection.5.4}{Nameren\341 data}{section.5}% 17
+\BOOKMARK [1][-]{section.6}{Z\341ver}{}% 18

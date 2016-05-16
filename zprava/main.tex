@@ -1,13 +1,13 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[10pt,a4paper]{article}
 \usepackage{geometry}
- \geometry{
- a4paper,
- total={210mm,297mm},
- left=20mm,
- right=20mm,
- top=20mm,
- bottom=20mm,
- }
+% \geometry{
+% a4paper,
+% total={210mm,297mm},
+% left=20mm,
+% right=20mm,
+% top=20mm,
+% bottom=20mm,
+% }
 \usepackage[utf8]{inputenc}
 \usepackage[english,czech]{babel}
 \usepackage{makeidx}
@@ -23,13 +23,15 @@
 \usepackage[T1]{fontenc}
 \usepackage{listingsutf8}
 \usepackage{cite}
-\usepackage{mdframed}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
 
 \begin{document}
 \title{Hledání nejkratší cesty v grafu}
 \author{Jakub Javůrek \& Martin Beránek}
 \maketitle
-
+\newpage
 \tableofcontents
 \listoffigures
 %\listoftables
@@ -327,7 +329,6 @@ dijks.cpp:20: note: Completely unroll loop 2 times
 První měření proběhlo na \texttt{Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz}. První měření proběhlo na Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz. Počet vláken provádějících výpočet byl zvyšován v následující řadě: 1, 2, \dots , 24. Měření probíhalo pomocí skriptu v noci s kontrolou, zdali na clusteru nejsou další uživatelé. Měření proběhlo ve tři hodiny ráno z noci z neděle na pondělí.
 
 Doby výpočtu je v následující tabulce (\ref{tab:xnfl}):
-
 \begin{table}[H]
   \centering
 	\caption{Čas výpočtu Floyd Warshall algoritmu}
@@ -683,6 +684,224 @@ Počet vláken & Rychlost ve vteřinách \\ \hline
   \caption{Graf zrychlení výpočtu Floyd Warshall}
   \label{fig:floydcudatwo}
 \end{figure}
+
+\subsection{Dijkstrův algoritmus}
+
+Volání grafické karty předchází inicializace a kopírování matice do \texttt{CUDA} zařízení. Prostor vláken výpočtu je rozdělen ve dvou dimenzích. Počet bloků odpovídá počtu uzlů děleným počtem vláken v bloku. Počet vláken v bloku je definován v \texttt{BLOCK\_SIZE}.
+
+\begin{verbatim}
+.
+.
+.
+int *cumatrix; 
+int *d;
+cudaMalloc((void **)&cumatrix, stc * stc * sizeof(int));
+cudaMemcpy(cumatrix, matrix,  stc * stc * sizeof(int), cudaMemcpyHostToDevice);
+cudaMalloc((void **)&d, stc * stc * sizeof(int));
+
+prepareArray<<<stc / BLOCK_SIZE, BLOCK_SIZE>>>(stc, d);
+cudaError_t code = cudaThreadSynchronize();  
+if (code != cudaSuccess)
+{
+  fprintf(stdout, "GPUassert: %s \n", cudaGetErrorString(code));
+}
+
+dijsktra<<<stc / BLOCK_SIZE, BLOCK_SIZE>>>(cumatrix, stc, d);
+code = cudaThreadSynchronize();  
+if (code != cudaSuccess)
+{
+  fprintf(stdout, "GPUassert: %s \n", cudaGetErrorString(code));
+}
+  
+int *outM = new int[stc*stc];
+cudaMemcpy(outM, d,  stc * stc * sizeof(int), cudaMemcpyDeviceToHost);
+.
+.
+.
+\end{verbatim}
+
+Následně se zavolá funkce \texttt{prepareArray}, která na grafické kartě nastaví matici pro výpočet algoritmu. Po dokončení výpočtu se zavolá samotný algoritmus.
+
+\begin{verbatim}
+__global__ void prepareArray(int vertexCnt, int* d)
+{
+  int threads = gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z; //celkovy pocet vlaken
+  int cycleCnt = (vertexCnt / threads > 0 ? vertexCnt / threads : 1); //velikost prace vlakna
+  for (int cycle = 0; cycle < cycleCnt; cycle++)
+  {
+    int s = (blockIdx.x * blockDim.x + threadIdx.x) + threads * cycle;
+    if(s >= vertexCnt) 
+      return;
+
+    for (int i = 0; i < vertexCnt; i++)
+    {
+      d[vertexCnt *i+s] = INT_MAX / 2;
+    }
+  }
+}
+\end{verbatim}
+
+Jelikož na grafické kartě nelze použít implementaci ADT množiny std::set, vytvořili jsme pro naše účely jednoduchou vlastní implementaci:
+\begin{verbatim}
+class mySet
+{
+private:
+  int size = 4000;
+  bool N[4000]; //pro nase ucely staci takto omezit
+  int cnt = 4000;
+	
+public:
+  __device__ mySet(){}
+	
+  __device__ void init(int s)
+  {
+    this->cnt = s;
+    for (int i = 0; i < s; i++)
+    {
+      N[i] = true;
+    }
+  }
+
+  __device__ bool contains(int x)
+  {
+    return N[x];
+  }
+
+  __device__ void insert(int x)
+  {
+    if (N[x] == true)
+      return;
+    N[x] = true;
+    cnt++;
+  }
+
+  __device__ void erase(int x)
+  {
+    if (N[x] == true)
+    {
+      N[x] = false;
+      cnt--;
+    }
+  }
+
+  __device__ bool empty()
+  {
+    return (cnt == 0);
+  }
+
+  __device__ int getCount()
+  {
+    return cnt;
+  }
+};
+\end{verbatim}
+
+Výpočet algoritmu:
+
+\begin{verbatim}
+__global__ void dijsktra( int* __restrict__ edgeMatrix, int vertexCnt, int* d)
+{
+  int threads = gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z;
+  int cycleCnt = (vertexCnt / threads > 0 ? vertexCnt / threads : 1); //velikost prace vlakna
+  for (int cycle = 0; cycle < cycleCnt; cycle++)
+  {
+    int s = (blockIdx.x * blockDim.x + threadIdx.x) + threads * cycle;
+    if(s >= vertexCnt) 
+      return;
+			
+    mySet N; 
+		
+    N.init(vertexCnt);
+
+    d[s*vertexCnt + s] = 0;
+    while (!N.empty())
+    {
+      int localMin = INT_MAX;
+
+      int cnt = N.getCount();
+      int u = 0;
+      int j = 0;
+      for (int i = 0; i < vertexCnt && j < cnt; i++)
+      {
+        if (!N.contains(i)) continue;
+        if (localMin > d[vertexCnt *i+s])
+        {
+          localMin = d[vertexCnt *i+s];
+          u = i;
+        }
+        j++;
+      }
+      N.erase(u);
+
+      for (int i = 0; i < vertexCnt; i++)
+      {
+        if (i == u || !N.contains(i)) continue;
+
+        if (edgeMatrix[u + i*vertexCnt] > 0)
+        {
+          int alt = d[vertexCnt *u+s] + edgeMatrix[u + i*vertexCnt];
+          atomicMin((d + vertexCnt * i + s), alt);
+        }
+      }
+    }
+  }
+}
+\end{verbatim}
+
+Idea za algoritmem je jednoduchá - vlákna si rozdělí matici grafu po sloupcích a postupně zpracovávají svůj přídel práce.
+
+Měření proběhne pomocí měnění velikosti proměnnné \texttt{BLOCK\_SIZE}, která představuje počet vláken, které v buňce tabulky pracují.
+
+\subsection{Naměřená data}
+
+Zde měření probíhalo pouze na \texttt{GTS 780 Ti} na školním clusteru \texttt{star.fit.cvut.cz}.
+
+\begin{table}[H]
+  \centering
+	\caption{Čas výpočtu Dijkstrova algoritmu na GTS 780 Ti v milisekundách}
+	\begin{tabular}{| l | r |}
+\hline
+Počet vláken & Rychlost ve vteřinách \\ \hline
+11 & 97627.6 \\ \hline
+31 & 50964.5 \\ \hline
+47 & 38982.1 \\ \hline
+91 & 33748.9 \\ \hline
+151 & 33750 \\ \hline
+255 & 33738 \\ \hline
+403 & 34409 \\ \hline
+575 & 33763.7 \\ \hline
+763 & 23035.4 \\ \hline
+855 & 23018.2 \\ \hline
+951 & 23042.7 \\ \hline
+1023 & 23030.5 \\ \hline
+	\end{tabular}
+  \label{tab:cufltwo}
+\end{table}
+
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.8\textwidth]{graf_dikstra_gts_780_Ti.png}
+  \caption{Graf zrychlení výpočtu Dijkstrova algoritmu}
+  \label{fig:dijkscuda}
+\end{figure}
+
+
+\newpage
+
+\section{Závěr}
+
+Při paralelizaci na procesoru Intel Xeon dosahujeme většího zrychlení u dijkstrova algoritmu. Floyd-Warshallův zrychluje nejvíce 6x, kdežto dijkstrův až 12x - zřejmě lépe využívá virtuální vlákna. Díky tomu dosahují při vyšším počtu vláken oba algoritmy srovnatelných výsledků, přestože při sekvenčním běhu je Floyd-Warshallův přibližně dvakrát rychlejší (pro měřená vstupní data).
+
+Při běhu na akcelerátoru Intel Xeon Phi dojde při vyšším počtu vláken k zanedbatelnému zrychlení u Floyd-Warshalla. Dijkstrův algoritmus je naopak mírně pomalejší - projevují se datové závislosti.
+Na obou grafech lze vidět úpadek ve výkonu při počtech vláken v intervalech po 61. Projevuje se zde omezení počtu vláken na kartu.
+
+Implementace Floyd-Warshallova algoritmu v CUDA zrychluje prakticky lineárně přibližně do 100 vláken. Poté se již pohybuje okolo stálé konstanty. Dijkstrův algoritmus zrychluje jen asi do 50 vláken, poté je zde ještě menší skok okolo 800. Horší škálování je dáno jednak implmentací, druhak datovými závislostmi algoritmu.
+
+Srovnáme-li časy výpočtů dosažené na grafické kartě s těmi z klasického CPU nebo akcelerátoru Xeon Phi vidíme, že u GPU dosahujeme zdaleka nejhorších výsledků - i při nejvyšších dosažených zrychleních se nevyrovnáme sekvenčnímu řešení na CPU.
+
+Podle výsledků všech měření se zdá, že problém hledání nejkratší cesty je (za použití našich implementaci obou algoritmů)
+nejvýhodnější řešit na standardním CPU, zde Intel Xeon 2620 v2. 
 
 \newpage
 

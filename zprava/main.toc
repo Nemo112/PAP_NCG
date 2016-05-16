@@ -1,16 +1,19 @@
 \select@language {czech}
-\contentsline {section}{\numberline {1}Definice probl\IeC {\'e}mu}{2}
-\contentsline {subsection}{\numberline {1.1}Zad\IeC {\'a}n\IeC {\'\i }}{2}
-\contentsline {section}{\numberline {2}Sekven\IeC {\v c}n\IeC {\'\i } \IeC {\v r}e\IeC {\v s}en\IeC {\'\i } a implementace}{2}
-\contentsline {subsection}{\numberline {2.1}Floyd Warshall algoritmus}{2}
-\contentsline {subsubsection}{\numberline {2.1.1}Implementace}{2}
-\contentsline {subsection}{\numberline {2.2}Dijkstr\IeC {\r u}v algoritmus}{3}
-\contentsline {subsubsection}{\numberline {2.2.1}Implementace}{3}
-\contentsline {section}{\numberline {3}Instance dat}{4}
-\contentsline {section}{\numberline {4}OpenMP}{4}
-\contentsline {subsection}{\numberline {4.1}Floyd Warshall algoritmus}{4}
-\contentsline {subsection}{\numberline {4.2}Dijkstr\IeC {\r u}v algoritmus}{5}
-\contentsline {subsection}{\numberline {4.3}Nam\IeC {\v e}\IeC {\v r}en\IeC {\'a} data}{6}
-\contentsline {section}{\numberline {5}CUDA}{11}
-\contentsline {subsection}{\numberline {5.1}Floyd Warshall algoritmus}{11}
-\contentsline {subsection}{\numberline {5.2}Nam\IeC {\v e}\IeC {\v r}en\IeC {\'a} data}{12}
+\contentsline {section}{\numberline {1}Definice probl\IeC {\'e}mu}{3}{section.1}
+\contentsline {subsection}{\numberline {1.1}Zad\IeC {\'a}n\IeC {\'\i }}{3}{subsection.1.1}
+\contentsline {section}{\numberline {2}Sekven\IeC {\v c}n\IeC {\'\i } \IeC {\v r}e\IeC {\v s}en\IeC {\'\i } a implementace}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Floyd Warshall algoritmus}{3}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}Implementace}{3}{subsubsection.2.1.1}
+\contentsline {subsection}{\numberline {2.2}Dijkstr\IeC {\r u}v algoritmus}{4}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Implementace}{4}{subsubsection.2.2.1}
+\contentsline {section}{\numberline {3}Instance dat}{5}{section.3}
+\contentsline {section}{\numberline {4}OpenMP}{6}{section.4}
+\contentsline {subsection}{\numberline {4.1}Floyd Warshall algoritmus}{6}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Dijkstr\IeC {\r u}v algoritmus}{7}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Nam\IeC {\v e}\IeC {\v r}en\IeC {\'a} data}{8}{subsection.4.3}
+\contentsline {section}{\numberline {5}CUDA}{16}{section.5}
+\contentsline {subsection}{\numberline {5.1}Floyd Warshall algoritmus}{16}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Nam\IeC {\v e}\IeC {\v r}en\IeC {\'a} data}{18}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Dijkstr\IeC {\r u}v algoritmus}{21}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}Nam\IeC {\v e}\IeC {\v r}en\IeC {\'a} data}{24}{subsection.5.4}
+\contentsline {section}{\numberline {6}Z\IeC {\'a}v\IeC {\v e}r}{26}{section.6}
