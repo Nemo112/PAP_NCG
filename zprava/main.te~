@@ -28,7 +28,7 @@
 
 
 \begin{document}
-\title{Hledání nejkratší cesty v~grafu}
+\title{Hledání nejkratší cesty v grafu}
 \author{Jakub Javůrek \& Martin Beránek}
 \maketitle
 \newpage
@@ -42,15 +42,15 @@
 
 \subsection{Zadání}
 
-Implementujte minimálně tyto algoritmy hledání nejkratších cest v~grafu (mezi všema dvojicemi uzlů):
+Implementujte minimálně tyto algoritmy hledání nejkratších cest v grafu (mezi všema dvojicemi uzlů):
 \begin{itemize}
-    \item Dijkstra viz, nutná úprava algoritmu (najde všechny vzdálenosti z~1 bodu).
+    \item Dijkstra viz, nutná úprava algoritmu (najde všechny vzdálenosti z 1 bodu).
     \item Floydův-Warshallův algoritmus.
     \item Úkol: * x86 a Xeon.
 \end{itemize}
 
 \begin{itemize}
-    \item Paralelizace obout metod, u~Dijkstry každé vlákno provádí hledání z~jiného startovního bodu.
+    \item Paralelizace obout metod, u Dijkstry každé vlákno provádí hledání z jiného startovního bodu.
     \item CUDA.
     \item Paralelizace jen Floydův-Warshallova algoritmu.
 \end{itemize}
@@ -59,7 +59,7 @@ Implementujte minimálně tyto algoritmy hledání nejkratších cest v~grafu (m
 
 \subsection{Floyd Warshall algoritmus}
 
-Floyd Warshall algoritmus slouží k~vytvoření nejkratších cest v~grafu mezi všemi dvojicemi vrcholů grafu \cite{floydWarsh}. Vzdálenosti mezi vrcholy jsou zaneseny v~matici přechodů, ty nesmějí mít záporné hodnoty.
+Floyd Warshall algoritmus slouží k vytvoření nejkratších cest v grafu mezi všemi dvojicemi vrcholů grafu \cite{floydWarsh}. Vzdálenosti mezi vrcholy jsou zaneseny v matici přechodů, ty nesmějí mít záporné hodnoty.
 
 Psedokód:
 
@@ -74,13 +74,13 @@ procedure [array] FloydWarshall(D, P)
     return P
 \end{verbatim}
 
-V~poli P jsou uloženy předchůdci pro směrování v~grafu. V~poli D jsou uloženy vzdálenosti.
+V poli P jsou uloženy předchůdci pro směrování v grafu. V poli D jsou uloženy vzdálenosti.
 
 Složitost algoritmu je $O (|U|^3)$.
 
 \subsubsection{Implementace}
 
-Následující část obsahuje implementaci algoritmu v~jazyce \texttt{C++}.
+Následující část obsahuje implementaci algoritmu v jazyce \texttt{C++}.
 
 \begin{verbatim}
 void floyd(int **matrix, int n)
@@ -113,7 +113,7 @@ void floyd(int **matrix, int n)
 
 \subsection{Dijkstrův algoritmus}
 
-Dijkstrův algoritmus slouží pro nalezení nejkratších cest v~grafu pro jeden vrchol grafu \cite{dijskraAlg}. Algoritmus pracuje s~maticí přechodu, která neobsahuje záporné hrany.
+Dijkstrův algoritmus slouží pro nalezení nejkratších cest v grafu pro jeden vrchol grafu \cite{dijskraAlg}. Algoritmus pracuje s maticí přechodu, která neobsahuje záporné hrany.
 
 Psedokód:
 
@@ -141,7 +141,7 @@ procedure [array], [array] Dijkstra(Graph, source, D):
 
 \subsubsection{Implementace}
 
-Následující část obsahuje implementaci algoritmu v~jazyce \texttt{C++}.
+Následující část obsahuje implementaci algoritmu v jazyce \texttt{C++}.
 
 \begin{verbatim}
 int * dijsktra(int ** edgeMatrix, int vertexCnt, int s){
@@ -181,11 +181,11 @@ int * dijsktra(int ** edgeMatrix, int vertexCnt, int s){
 }
 \end{verbatim}
 
-Jelikož je v~zadáno, že výsledkem musí být obsahovat vzdálenost všech vrcholy, je algoritmus volán postupně se všemi vrcholy grafu.
+Jelikož je v zadáno, že výsledkem musí být obsahovat vzdálenost všech vrcholy, je algoritmus volán postupně se všemi vrcholy grafu.
 
 \section{Instance dat}
 
-Pro oba algoritmy byla sestavená matice s~velikostí $4000x4000$ s~celkovou velikostí 31\,MB. Matice byla generována pomocí předepsané aplikace \texttt{generator}. Následně byla upravena do jiné formy pro změnění vzdáleností mezi body. Z~vygenerovaných vzdáleností 1 se stali náhodná čísla v~řádu desítek.
+Pro oba algoritmy byla sestavená matice s velikostí $4000x4000$ s celkovou velikostí 31\,MB. Matice byla generována pomocí předepsané aplikace \texttt{generator}. Následně byla upravena do jiné formy pro změnění vzdáleností mezi body. Z vygenerovaných vzdáleností 1 se stali náhodná čísla v řádu desítek.
 
 Pro náhled je uveden začátek matice:
 
@@ -204,7 +204,7 @@ Pro náhled je uveden začátek matice:
 
 \subsection{Floyd Warshall algoritmus}
 
-Algoritmus byl upraven o~direktivy pro překladač, který zapínají \texttt{OpenMP}. Vektorizaci bylo možné použít po úpravě podmínky v~\texttt{for} cyklu. Byla nahrazena funkcí \texttt{min}.
+Algoritmus byl upraven o direktivy pro překladač, který zapínají \texttt{OpenMP}. Vektorizaci bylo možné použít po úpravě podmínky v \texttt{for} cyklu. Byla nahrazena funkcí \texttt{min}.
 
 \begin{verbatim}
 void floyd(int **matrix, int n, int threadCnt)
@@ -239,20 +239,20 @@ void floyd(int **matrix, int n, int threadCnt)
 }
 \end{verbatim}
 
-Překladač cyklus nevektorizoval s~odůvodněním:
+Překladač cyklus nevektorizoval s odůvodněním:
 
 \begin{verbatim}
 floyd.cpp:36: note: not vectorized: not suitable for gather load _33 = *_32;
 floyd.cpp:36: note: bad data references.
 \end{verbatim}
 
-K~vektorizaci nedošlo kvůli nekonzistentní alokované paměti.
+K vektorizaci nedošlo kvůli nekonzistentní alokované paměti.
 
 \subsection{Dijkstrův algoritmus}
 
 Jedinou změnou pro Dijkstrův algoritmus bylo přidání \texttt{OpenMP} direktiv. Větší změny nebyly možné kvůli velkým datovým závislostem ve \texttt{for} cyklech. Ačkoliv bylo přidání jedno volání funkce \texttt{min}, zrychlení nebylo žádné, protože data, nad kterými je funkce vykována, závisí na zbytku těla cyklu.
 
-Dalším problémem je použití složité datové struktury pro hledání minima v~grafu. Práce s~ní algoritmus samozřejmě ještě víc zpomaluje.
+Dalším problémem je použití složité datové struktury pro hledání minima v grafu. Práce s ní algoritmus samozřejmě ještě víc zpomaluje.
 
 \begin{verbatim}
     if (threadCnt > 0)
@@ -302,12 +302,12 @@ int * dijsktra(int ** edgeMatrix, int vertexCnt, int s){
 }
 \end{verbatim}
 
-Překladač nevektorizoval cyklus hlavního výpočtu s~odůvodněním:
+Překladač nevektorizoval cyklus hlavního výpočtu s odůvodněním:
 \begin{verbatim}
 dijks.cpp:32: note: not vectorized: control flow in loop.
 \end{verbatim}
 
-K~vektorizaci nedošlo kvůli řídícím strukturám v~cyklu. 
+K vektorizaci nedošlo kvůli řídícím strukturám v cyklu. 
 
 Naopak se povedl vektorizovat výpočet na začátku funkce nastavující \texttt{LARGE\_INT} a \texttt{-1}. Překladač vypsal zprávu:
 
@@ -326,9 +326,9 @@ dijks.cpp:20: note: Completely unroll loop 2 times
 
 \subsection{Naměřená data}
 
-První měření proběhlo na \texttt{Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz}. První měření proběhlo na Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz. Počet vláken provádějících výpočet byl zvyšován v~následující řadě: 1, 2, \dots , 24. Měření probíhalo pomocí skriptu v~noci s~kontrolou, zdali na clusteru nejsou další uživatelé. Měření proběhlo ve tři hodiny ráno z~noci z~neděle na pondělí.
+První měření proběhlo na \texttt{Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz}. První měření proběhlo na Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz. Počet vláken provádějících výpočet byl zvyšován v následující řadě: 1, 2, \dots , 24. Měření probíhalo pomocí skriptu v noci s kontrolou, zdali na clusteru nejsou další uživatelé. Měření proběhlo ve tři hodiny ráno z noci z neděle na pondělí.
 
-Doby výpočtu je v~následující tabulce (\ref{tab:xnfl}):
+Doby výpočtu je v následující tabulce (\ref{tab:xnfl}):
 \begin{table}[H]
   \centering
 	\caption{Čas výpočtu Floyd Warshall algoritmu}
@@ -415,11 +415,11 @@ Počet vláken & Rychlost ve vteřinách \\ \hline
   \label{fig:dijk}
 \end{figure}
 
-Zrychlení algoritmu se drží lineárního zrychlení. Důvodem také může být, že celý výpočet je v~jedné instanci o~řád pomalejší, než v~případu Floyd Warshalla. Ve velkých počtech instancí se však doba zpracování přestává lišit.
+Zrychlení algoritmu se drží lineárního zrychlení. Důvodem také může být, že celý výpočet je v jedné instanci o řád pomalejší, než v případu Floyd Warshalla. Ve velkých počtech instancí se však doba zpracování přestává lišit.
 
-Druhé měření proběhlo na \texttt{Intel(R) Xeon(R) Phi(TM)}. Měření proběhlo pomocí skriptu v~době, kdy na clusteru nikdo jiný nebyl. Měření tedy mohlo proběhnout v~řadě 1, 2, \dots , 244 vláken.
+Druhé měření proběhlo na \texttt{Intel(R) Xeon(R) Phi(TM)}. Měření proběhlo pomocí skriptu v době, kdy na clusteru nikdo jiný nebyl. Měření tedy mohlo proběhnout v řadě 1, 2, \dots , 244 vláken.
 
-V~následující tabulce jsou uvedeny pouze referenční hodnoty (\ref{tab:djph}):
+V následující tabulce jsou uvedeny pouze referenční hodnoty (\ref{tab:djph}):
 
 \begin{table}[H]
   \centering
@@ -463,7 +463,7 @@ Počet vláken & Rychlost ve vteřinách \\ \hline
   \label{fig:floydphi}
 \end{figure}
 
-Zrychlení Floyd Warshallova algoritmu pro velké počty vláken přestává držet lineární zrychlení. Výkyvy po 61 jádrech ukazují na omezení v~počtu vláken na kartu. V~případě počtu vláken 62 jsou zabraná všechna jádra a jedno z~nich pracuje se dvěma vlákny. Tím je celý výpočet zpomalen. Zrychlení se vylepšuje s~použitím více 9 vláken na jádro. K~největšímu zrychlení došlo při použití 183 vláken ($3 \cdot 61$).
+Zrychlení Floyd Warshallova algoritmu pro velké počty vláken přestává držet lineární zrychlení. Výkyvy po 61 jádrech ukazují na omezení v počtu vláken na kartu. V případě počtu vláken 62 jsou zabraná všechna jádra a jedno z nich pracuje se dvěma vlákny. Tím je celý výpočet zpomalen. Zrychlení se vylepšuje s použitím více 9 vláken na jádro. K největšímu zrychlení došlo při použití 183 vláken ($3 \cdot 61$).
 
 \begin{table}[H]
   \centering
@@ -544,7 +544,7 @@ Velikost bloku je stejná jako počet použitých vláken. Jejich dělení je na
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.8\textwidth]{grid.png}
-  \caption{Rozmístění vláken v~gridu}
+  \caption{Rozmístění vláken v gridu}
   \label{fig:grid}
 \end{figure}
 
@@ -595,9 +595,9 @@ __global__ void floyd_kern(int k, int *matrix, int n){
 }
 \end{verbatim}
 
-Na rozdíl od řešení pomocí cyklů každé vlákno představuje jeden samostatný kousek výpočtu. Všechna součastně běžící vlákna mezi sebou sdílí \texttt{bmatch}, který představuje \texttt{matrix[i*n+k]}. Podle umístěná v~gridu se rozhodnou, zdali je nejlepší cestou současná hodnota nebo součet \texttt{tmp} a \texttt{bmatch}, které představují \texttt{matrix[i*n+k] + matrix[k*n+j]}. V~případě, že je \texttt{bmatch} nebo \texttt{tmp} roven nekonečnu, pak nemohou představovat v~součtu nejlepší cestu a vlákno se ukončuje.
+Na rozdíl od řešení pomocí cyklů každé vlákno představuje jeden samostatný kousek výpočtu. Všechna součastně běžící vlákna mezi sebou sdílí \texttt{bmatch}, který představuje \texttt{matrix[i*n+k]}. Podle umístěná v gridu se rozhodnou, zdali je nejlepší cestou současná hodnota nebo součet \texttt{tmp} a \texttt{bmatch}, které představují \texttt{matrix[i*n+k] + matrix[k*n+j]}. V případě, že je \texttt{bmatch} nebo \texttt{tmp} roven nekonečnu, pak nemohou představovat v součtu nejlepší cestu a vlákno se ukončuje.
 
-Měření proběhne pomocí měnění velikosti proměnnné \texttt{BLOCK\_SIZE}, která představuje velikost sloupce v~řádku a také počet vláken, které v~buňce tabulky pracují.
+Měření proběhne pomocí měnění velikosti proměnnné \texttt{BLOCK\_SIZE}, která představuje velikost sloupce v řádku a také počet vláken, které v buňce tabulky pracují.
 
 \subsection{Naměřená data}
 
@@ -605,10 +605,10 @@ První měření probíhalo na \texttt{GTS 650 Ti}.
 
 \begin{table}[H]
   \centering
-	\caption{Čas výpočtu Floyd Warshall algoritmu na GTS 650 Ti v~milisekundách}
+	\caption{Čas výpočtu Floyd Warshall algoritmu na GTS 650 Ti v milisekundách}
 	\begin{tabular}{| l | r |}
 \hline
-Počet vláken & Rychlost v~milisekundách \\ \hline
+Počet vláken & Rychlost v milisekundách \\ \hline
 40 & 27695,6 \\ \hline
 80 & 14280,9 \\ \hline
 120 & 10626,7 \\ \hline
@@ -651,10 +651,10 @@ Druhé měření probíhalo na \texttt{GTS 780 Ti} na školním clusteru \texttt
 
 \begin{table}[H]
   \centering
-	\caption{Čas výpočtu Floyd Warshall algoritmu na \texttt{GTS 780 Ti} v~milisekundách}
+	\caption{Čas výpočtu Floyd Warshall algoritmu na \texttt{GTS 780 Ti} v milisekundách}
 	\begin{tabular}{| l | r |}
 \hline
-Počet vláken & Rychlost v~milisekundách \\ \hline
+Počet vláken & Rychlost v milisekundách \\ \hline
 33 & 13517,8 \\ \hline
 99 & 3383,1 \\ \hline
 165 & 3184,83 \\ \hline
@@ -688,7 +688,7 @@ Počet vláken & Rychlost v~milisekundách \\ \hline
 
 \subsection{Dijkstrův algoritmus}
 
-Volání grafické karty předchází inicializace a kopírování matice do \texttt{CUDA} zařízení. Prostor vláken výpočtu je rozdělen ve dvou dimenzích. Počet bloků odpovídá počtu uzlů děleným počtem vláken v~bloku. Počet vláken v~bloku je definován v~\texttt{BLOCK\_SIZE}.
+Volání grafické karty předchází inicializace a kopírování matice do \texttt{CUDA} zařízení. Prostor vláken výpočtu je rozdělen ve dvou dimenzích. Počet bloků odpovídá počtu uzlů děleným počtem vláken v bloku. Počet vláken v bloku je definován v \texttt{BLOCK\_SIZE}.
 
 \begin{verbatim}
 .
@@ -856,7 +856,7 @@ __global__ void dijsktra( int* __restrict__ edgeMatrix, int vertexCnt, int* d)
 
 Idea za algoritmem je jednoduchá -- vlákna si rozdělí matici grafu po sloupcích a postupně zpracovávají svůj příděl práce.
 
-Měření proběhne pomocí měnění velikosti proměnnné \texttt{BLOCK\_SIZE}, která představuje počet vláken, které v~buňce tabulky pracují.
+Měření proběhne pomocí měnění velikosti proměnnné \texttt{BLOCK\_SIZE}, která představuje počet vláken, které v buňce tabulky pracují.
 
 \subsection{Naměřená data}
 
@@ -864,7 +864,7 @@ Zde měření probíhalo pouze na \texttt{GTS 780 Ti} na školním clusteru \tex
 
 \begin{table}[H]
   \centering
-	\caption{Čas výpočtu Dijkstrova algoritmu na GTS 780 Ti v~milisekundách}
+	\caption{Čas výpočtu Dijkstrova algoritmu na GTS 780 Ti v milisekundách}
 	\begin{tabular}{| l | r |}
 \hline
 Počet vláken & Rychlost ve vteřinách \\ \hline
@@ -897,12 +897,12 @@ Počet vláken & Rychlost ve vteřinách \\ \hline
 
 \section{Závěr}
 
-Při paralelizaci na procesoru \texttt{Intel Xeon} dosahujeme většího zrychlení u~Dijkstrova algoritmu. Floyd Warshallův zrychluje nejvíce 6x, kdežto Dijkstrův až 12x -- zřejmě lépe využívá virtuální vlákna. Díky tomu dosahují při vyšším počtu vláken oba algoritmy srovnatelných výsledků, přestože při sekvenčním běhu je Floyd Warshallův přibližně dvakrát rychlejší (pro měřená vstupní data).
+Při paralelizaci na procesoru \texttt{Intel Xeon} dosahujeme většího zrychlení u Dijkstrova algoritmu. Floyd Warshallův zrychluje nejvíce 6x, kdežto Dijkstrův až 12x -- zřejmě lépe využívá virtuální vlákna. Díky tomu dosahují při vyšším počtu vláken oba algoritmy srovnatelných výsledků, přestože při sekvenčním běhu je Floyd Warshallův přibližně dvakrát rychlejší (pro měřená vstupní data).
 
-Při běhu na akcelerátoru \texttt{Intel Xeon Phi} dojde při vyšším počtu vláken k~zanedbatelnému zrychlení u~Floyd Warshalla. Dijkstrův algoritmus je naopak mírně pomalejší -- projevují se datové závislosti.
-Na obou grafech lze vidět úpadek ve výkonu při počtech vláken v~intervalech po 61. Projevuje se zde omezení počtu vláken na kartu.
+Při běhu na akcelerátoru \texttt{Intel Xeon Phi} dojde při vyšším počtu vláken k zanedbatelnému zrychlení u Floyd Warshalla. Dijkstrův algoritmus je naopak mírně pomalejší -- projevují se datové závislosti.
+Na obou grafech lze vidět úpadek ve výkonu při počtech vláken v intervalech po 61. Projevuje se zde omezení počtu vláken na kartu.
 
-Implementace Floyd Warshallova algoritmu v~\texttt{CUDA} zrychluje prakticky lineárně přibližně do 100 vláken. Poté se již pohybuje okolo stálé konstanty. Dijkstrův algoritmus zrychluje jen asi do 50 vláken, poté je zde ještě menší skok okolo 800. Horší škálování je dáno implementací a datovými závislostmi algoritmu.
+Implementace Floyd Warshallova algoritmu v \texttt{CUDA} zrychluje prakticky lineárně přibližně do 100 vláken. Poté se již pohybuje okolo stálé konstanty. Dijkstrův algoritmus zrychluje jen asi do 50 vláken, poté je zde ještě menší skok okolo 800. Horší škálování je dáno implementací a datovými závislostmi algoritmu.
 
 \begin{table}[H]
   \centering
